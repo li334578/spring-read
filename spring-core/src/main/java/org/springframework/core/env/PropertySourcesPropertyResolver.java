@@ -82,6 +82,7 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 					logger.trace("Searching for key '" + key + "' in PropertySource '" +
 							propertySource.getName() + "'");
 				}
+				// 获取替换的目标值
 				Object value = propertySource.getProperty(key);
 				if (value != null) {
 					if (resolveNestedPlaceholders && value instanceof String) {

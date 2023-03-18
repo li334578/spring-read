@@ -235,6 +235,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 				this.valueSeparator, ignoreUnresolvablePlaceholders);
 	}
 
+	// 对配置文件中的占位符进行替换
 	private String doResolvePlaceholders(String text, PropertyPlaceholderHelper helper) {
 		return helper.replacePlaceholders(text, this::getPropertyAsRawString);
 	}

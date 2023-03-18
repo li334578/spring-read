@@ -188,7 +188,7 @@ final class PostProcessorRegistrationDelegate {
 
 	public static void registerBeanPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, AbstractApplicationContext applicationContext) {
-
+		// 获取所有后处理器的name
 		String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
 
 		// Register BeanPostProcessorChecker that logs an info message when
@@ -199,9 +199,13 @@ final class PostProcessorRegistrationDelegate {
 
 		// Separate between BeanPostProcessors that implement PriorityOrdered,
 		// Ordered, and the rest.
+		// 保存实现了PriorityOrdered 接口的 后处理器
 		List<BeanPostProcessor> priorityOrderedPostProcessors = new ArrayList<>();
+		// 保存MergedBeanDefinitionPostProcessor 和 PriorityOrdered的 后处理器
 		List<BeanPostProcessor> internalPostProcessors = new ArrayList<>();
+		// 保存实现了ordered的接口的 后处理器
 		List<String> orderedPostProcessorNames = new ArrayList<>();
+		// 保存没有实现以上任何接口的 后处理器
 		List<String> nonOrderedPostProcessorNames = new ArrayList<>();
 		for (String ppName : postProcessorNames) {
 			if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
@@ -220,7 +224,10 @@ final class PostProcessorRegistrationDelegate {
 		}
 
 		// First, register the BeanPostProcessors that implement PriorityOrdered.
+		// 实现了PriorityOrdered的接口进行排序
 		sortPostProcessors(priorityOrderedPostProcessors, beanFactory);
+		// 注册，实际上就是保存到 AbstractBeanFactory#beanPostProcessors 集合中。在getBean使用的时候直接拿取该属性即可
+		// registerBeanPostProcessors 方法会先移除已存在的 BeanPostProcessor 随后重新加入。
 		registerBeanPostProcessors(beanFactory, priorityOrderedPostProcessors);
 
 		// Next, register the BeanPostProcessors that implement Ordered.
